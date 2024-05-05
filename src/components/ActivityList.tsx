@@ -1,34 +1,18 @@
-import { Activity } from "../types";
-import { categories } from "../data/categories";
-import { useMemo } from "react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { ActivityActions } from "../reducers/activity-reducer";
+import { useActivity } from "../hooks/useActivity";
 
-type ActivityListProps = {
-  activities: Activity[];
-  dispatch: React.Dispatch<ActivityActions>;
-};
-
-const ActivityList = ({ activities, dispatch }: ActivityListProps) => {
-  const categoryName = useMemo(
-    () => (category: Activity["category"]) =>
-      categories.map((cat) => (cat.id === category ? cat.name : "")),
-    []
-  );
-  const isEmptyActivities = useMemo(
-    () => activities.length === 0,
-    [activities]
-  );
+const ActivityList = () => {
+  const { state, dispatch, categoryName, isEmptyActivities } = useActivity();
 
   return (
-    <div className=" bg-gray-50 rounded-lg max-h-[500px] min-h-[500px]">
+    <div className=" bg-gray-50 rounded-lg max-h-[500px]">
       <h2 className="text-2xl md:text-4xl font-bold text-slate-500 text-center z-10  p-5">
         Comidas y Actividades
       </h2>
 
       {!isEmptyActivities ? (
-        <div className="px-10 rounded-lg  overflow-scroll">
-          {activities.map((activity) => (
+        <div className="px-10 rounded-lg overflow-scroll max-h-[400px]">
+          {state.activities.map((activity) => (
             <div
               key={activity.id}
               className="px-5 py-5 bg-white flex justify-between shadow-lg rounded-lg my-10"
